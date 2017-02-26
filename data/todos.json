@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Task 1",
+    "description": "Descr 1",
+    "hours": 5,
+    "taskState": "todo",
+    "id": 0,
+    "createTime": 0
+  },
+  {
+    "name": "Task 2",
+    "description": "Descr 2",
+    "hours": 10,
+    "taskState": "todo",
+    "id": 1,
+    "createTime": 0
+  },
+  {
+    "name": "Task 3",
+    "description": "Descr 3",
+    "hours": 15,
+    "taskState": "inProgress",
+    "id": 2,
+    "createTime": 0
+  },
+  {
+    "name": "Task 4",
+    "description": "Descr 4",
+    "hours": 20,
+    "taskState": "inProgress",
+    "id": 3,
+    "createTime": 0
+  },
+  {
+    "name": "Task 5",
+    "description": "Descr 5",
+    "hours": 25,
+    "taskState": "testing",
+    "id": 4,
+    "createTime": 0
+  },
+  {
+    "name": "Task 6",
+    "description": "Descr 6",
+    "hours": 30,
+    "taskState": "done",
+    "id": 5,
+    "createTime": 0
+  },
+  {
+    "name": "Task 7",
+    "description": "Descr 7",
+    "hours": 3,
+    "taskState": "done",
+    "id": 6,
+    "createTime": 0
+  }
+]

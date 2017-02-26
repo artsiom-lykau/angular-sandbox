@@ -1,0 +1,12 @@
+<a ui-sref="list">go to list</a>
+<form>
+    <input placeholder="name" type="text" name="name" ng-model="newTask.name">
+    <input placeholder="description" type="text" name="description" ng-model="newTask.description">
+    <input placeholder="hours" type="number" name="hours" ng-model="newTask.hours">
+    <label for="newTask">select task state:</label>
+    <select id="newTask"
+            ng-model="newTask.taskState"
+            ng-options="state.state as state.title for state in states">
+    </select>
+    <button ng-click="addNewTask(newTask)">add new task</button>
+</form>

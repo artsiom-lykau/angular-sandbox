@@ -1,0 +1,35 @@
+<filter-template></filter-template>
+<div class="list-container">
+    <h1 class="state-heading">{{tasksToShow.header}}</h1>
+    <ul ng-repeat="task in tasksToShow.data | orderBy: getOrderProp() : descOrder">
+        <li class="task"
+            ng-class="{'todo-clr': task.taskState == 'todo',
+                       'in-progress-clr': task.taskState == 'inProgress',
+                       'testing-clr': task.taskState == 'testing',
+                       'done-clr': task.taskState == 'done'}">
+
+            <h3 ng-hide="showEditMenu">{{task.name}}</h3>
+            <input type="text" ng-model="task.name" ng-show="showEditMenu">
+
+            <h4 ng-hide="showEditMenu">status: {{task.taskState}}</h4>
+            <label for="moveTo" ng-show="showEditMenu">move to state:</label>
+            <select id="moveTo"
+                    ng-model="task.taskState"
+                    ng-options="state.state as state.title for state in states"
+                    ng-show="showEditMenu">
+            </select>
+
+            <p ng-hide="showEditMenu">description: {{task.description}}</p>
+            <input type="text" ng-model="task.description" ng-show="showEditMenu">
+
+            <p ng-hide="showEditMenu">hours: {{task.hours}}</p>
+            <input type="number" ng-model="task.hours" ng-show="showEditMenu">
+
+            <button class="edit-btn" ng-click="showEditMenu = !showEditMenu">
+                {{showEditMenu ? 'close edit' : 'edit task'}}
+            </button>
+
+            <button class="delete-btn" ng-click="deleteTask(task)">X</button>
+        </li>
+    </ul>
+</div>
