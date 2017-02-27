@@ -15,7 +15,12 @@ angular.module('myApp')
                 $scope.newTask = {};
 
                 //  HERE HAVE TO PUSH TODOS TO SERVER
-                // ----------- $http.post('./todos.json', sharedService.todos); -----------
+
+                $http.post('/api/create-task', newTask)
+                    .then((data) => {
+                            console.log(data)
+                        }
+                    )
             };
 
             $scope.$watch(function () {

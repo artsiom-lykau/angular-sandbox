@@ -29,7 +29,7 @@ angular.module('myApp', ['ui.router'])
     .factory('getDataService', ['$http', '$q', function ($http, $q) {
         return function () {
             return $q.all([
-                $http.get('./data/todos.json'),
+                $http.get('/api/all-tasks'),
                 $http.get('./data/states.json')
             ]);
         }

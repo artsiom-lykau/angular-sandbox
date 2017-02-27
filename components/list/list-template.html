@@ -19,13 +19,13 @@
                     ng-show="showEditMenu">
             </select>
 
-            <p ng-hide="showEditMenu">description: {{task.description}}</p>
-            <input type="text" ng-model="task.description" ng-show="showEditMenu">
+            <p ng-hide="">description: {{task.description}}</p>
+            <input type="text" ng-model="task.description" ng-show="">
 
-            <p ng-hide="showEditMenu">hours: {{task.hours}}</p>
-            <input type="number" ng-model="task.hours" ng-show="showEditMenu">
+            <p ng-hide="">hours: {{task.hours}}</p>
+            <input type="number" ng-model="task.hours" ng-show="">
 
-            <button class="edit-btn" ng-click="showEditMenu = !showEditMenu">
+            <button class="edit-btn" ng-click="editTask(task)">
                 {{showEditMenu ? 'close edit' : 'edit task'}}
             </button>
 

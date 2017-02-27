@@ -29,7 +29,11 @@ angular.module('myApp')
             };
 
             /****** ADD EDIT FUNCTION ******/
-
+            $scope.showEditMenu = false;
+            $scope.editTask = function (task) {
+                $scope.showEditMenu = !$scope.showEditMenu;
+                console.log(task)
+            };
 
             $scope.deleteTask = function (task) {
                 sharedService.todos.splice(sharedService.todos.indexOf(task), 1);
@@ -42,6 +46,6 @@ angular.module('myApp')
         return {
             restrict: 'E',
             templateUrl: './components/list/list-template.html',
-            controller: 'ListController'
+            controller: 'ListController as listCtrl'
         }
     });
