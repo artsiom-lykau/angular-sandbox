@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "angular wunderlist",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "dev-start": "nodemon server.js",
+    "start": "node server.js"
+  },
   "author": "lykovartem",
   "license": "ISC",
   "dependencies": {

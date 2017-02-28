@@ -8,7 +8,6 @@ angular.module('myApp')
             $scope.showTasksByState = sharedService.showTasksByState;
 
             $scope.addNewTask = function (newTask) {
-                newTask.id = sharedService.todos.length;
                 newTask.createTime = Date.now();
                 sharedService.todos.push(newTask);
                 $scope.showTasksByState($scope.selectedState);

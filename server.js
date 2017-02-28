@@ -55,5 +55,21 @@ app.post('/api/create-task', function (req, res) {
     });
 });
 
+app.post('/api/update-task', function (req, res) {
+    let data = req.body;
+    console.log(data._id);
+    console.log(data.name);
+    /*TaskModel.findOne({_id: data._id}, function (err, obj) {
+     console.log(obj)
+     })*/
+
+    TaskModel.update({_id: data._id}, {
+        name: data.name,
+        description: data.description,
+    }, function (err, numberAffected, rawResponse) {
+        //handle it
+    })
+});
+
 app.listen(8080);
 console.log("App listening on port 8080");

@@ -3,8 +3,8 @@
  */
 
 angular.module('myApp')
-    .controller('ListController', ['sharedService', 'getDataService', '$scope',
-        function (sharedService, getDataService, $scope) {
+    .controller('ListController', ['sharedService', 'getDataService', '$scope', '$http',
+        function (sharedService, getDataService, $scope, $http) {
             let showTasksByState = sharedService.showTasksByState;
             $scope.showTasksByState = sharedService.showTasksByState;
 
@@ -12,6 +12,9 @@ angular.module('myApp')
                 return sharedService.tasksToShow
             }, function () {
                 $scope.tasksToShow = sharedService.tasksToShow;
+                if ($scope.tasksToShow) {
+                    $scope.tasksToShow.data.forEach(item => item.showEditMenu = false);
+                }
             });
 
             getDataService()
@@ -29,11 +32,20 @@ angular.module('myApp')
             };
 
             /****** ADD EDIT FUNCTION ******/
-            $scope.showEditMenu = false;
             $scope.editTask = function (task) {
-                $scope.showEditMenu = !$scope.showEditMenu;
-                console.log(task)
+                task.showEditMenu = !task.showEditMenu;
+
+                if (task.showEditMenu == false) {
+                    delete task.showEditMenu;
+                    $http.post('/api/update-task', task)
+                        .then(data => {
+                                console.log(data)
+                            }
+                        );
+                    console.log('send data');
+                }
             };
+
 
             $scope.deleteTask = function (task) {
                 sharedService.todos.splice(sharedService.todos.indexOf(task), 1);
@@ -46,6 +58,7 @@ angular.module('myApp')
         return {
             restrict: 'E',
             templateUrl: './components/list/list-template.html',
-            controller: 'ListController as listCtrl'
+            controller: 'ListController',
+            controllerAs: 'listCtrl'
         }
     });

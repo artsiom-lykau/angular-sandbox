@@ -39,7 +39,8 @@ angular.module('myApp', ['ui.router'])
             name: 'list',
             url: '/',
             templateUrl: './components/list/list-template.html',
-            controller: 'ListController'
+            controller: 'ListController',
+            controllerAs: 'listCtrl'
         };
 
         let inputState = {
