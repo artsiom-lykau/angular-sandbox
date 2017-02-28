@@ -37,7 +37,7 @@ app.get('/api/all-tasks', function (req, res) {
             res.send(err);
         }
         else {
-            res.json(tasks); // return all tasks in JSON format
+            res.json(tasks);
         }
     });
 });
@@ -49,26 +49,25 @@ app.post('/api/create-task', function (req, res) {
         if (err) {
             console.log('error saving')
         } else {
-            console.log('success saving');
             res.send('success saving')
         }
     });
 });
 
-app.post('/api/update-task', function (req, res) {
+app.put('/api/update-task/:_id', function (req, res) {
     let data = req.body;
-    console.log(data._id);
-    console.log(data.name);
-    /*TaskModel.findOne({_id: data._id}, function (err, obj) {
-     console.log(obj)
-     })*/
-
-    TaskModel.update({_id: data._id}, {
+    TaskModel.update({_id: req.params._id}, {
         name: data.name,
         description: data.description,
-    }, function (err, numberAffected, rawResponse) {
-        //handle it
+        hours: data.hours,
+        taskState: data.taskState
+    }, function (err, numAffected) {
+        // numAffected is the number of updated documents
     })
+});
+
+app.delete('/api/delete-task/:_id', function (req, res) {
+    TaskModel.remove({_id: req.params._id});
 });
 
 app.listen(8080);

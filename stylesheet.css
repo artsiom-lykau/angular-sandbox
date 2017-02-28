@@ -85,3 +85,11 @@ form *:not(label) {
 .testing-clr {
     background-color: lightseagreen;
 }
+
+.input-form * {
+    display: block;
+}
+
+.input-form button {
+    background-color: bisque;
+}

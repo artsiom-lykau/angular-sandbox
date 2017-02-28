@@ -31,26 +31,19 @@ angular.module('myApp')
                 return $scope.orderProp
             };
 
-            /****** ADD EDIT FUNCTION ******/
             $scope.editTask = function (task) {
                 task.showEditMenu = !task.showEditMenu;
 
                 if (task.showEditMenu == false) {
                     delete task.showEditMenu;
-                    $http.post('/api/update-task', task)
-                        .then(data => {
-                                console.log(data)
-                            }
-                        );
-                    console.log('send data');
+                    $http.put(`/api/update-task/${task._id}`, task);
                 }
             };
-
 
             $scope.deleteTask = function (task) {
                 sharedService.todos.splice(sharedService.todos.indexOf(task), 1);
                 showTasksByState(sharedService.selectedState);
-                /****** HERE HAVE TO POST CHANGES TO SERVER ******/
+                $http.delete(`/api/delete-task/${task._id}`, task);
             };
 
         }])

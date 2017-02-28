@@ -3,8 +3,8 @@
  */
 
 angular.module('myApp')
-    .controller('InputController', ['sharedService', '$scope', '$http',
-        function (sharedService, $scope, $http) {
+    .controller('InputController', ['sharedService', '$scope', '$http', 'getDataService',
+        function (sharedService, $scope, $http, getDataService) {
             $scope.showTasksByState = sharedService.showTasksByState;
 
             $scope.addNewTask = function (newTask) {
@@ -13,18 +13,18 @@ angular.module('myApp')
                 $scope.showTasksByState($scope.selectedState);
                 $scope.newTask = {};
 
-                //  HERE HAVE TO PUSH TODOS TO SERVER
-
                 $http.post('/api/create-task', newTask)
-                    .then((data) => {
-                            console.log(data)
-                        }
-                    )
             };
 
             $scope.$watch(function () {
                 return sharedService.states
             }, function () {
+                if (!sharedService.states) {
+                    getDataService()
+                        .then(res => {
+                            sharedService.states = res[1].data;
+                        })
+                }
                 $scope.states = sharedService.states;
             });
         }])

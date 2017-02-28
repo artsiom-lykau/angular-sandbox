@@ -11,8 +11,8 @@ angular.module('myApp')
                 return sharedService.states
             }, function () {
                 if (sharedService.states) {
-                    $scope.filterOptions = sharedService.states;
-                    $scope.filterOptions.unshift({title: 'All', state: 'all'})
+                    $scope.filterOptions = sharedService.states.slice();
+                    $scope.filterOptions.unshift({title: 'All', state: 'all'});
                 }
             });
 
@@ -25,7 +25,6 @@ angular.module('myApp')
     .directive('filterTemplate', function () {
         return {
             restrict: 'E',
-            scope: false,
             controller: 'filterController',
             templateUrl: './components/filter/filter-template.html'
         }
