@@ -1,7 +1,10 @@
 <filter-template></filter-template>
+<div ui-view="addNew"></div>
+
 <div class="list-container">
     <h1 class="state-heading">{{tasksToShow.header}}</h1>
-    <ul ng-repeat="task in tasksToShow.data | orderBy: getOrderProp() : descOrder track by $index">
+    <ul ng-repeat="task in tasksToShow.data | orderBy: getOrderProp() : descOrder track by $index"
+        ng-init="task.showEditMenu = false">
         <li class="task"
             ng-class="{'todo-clr': task.taskState == 'todo',
                        'in-progress-clr': task.taskState == 'inProgress',
@@ -11,7 +14,7 @@
             <h3 ng-hide="task.showEditMenu">{{task.name}}</h3>
             <input type="text" ng-model="task.name" ng-show="task.showEditMenu">
 
-            <h4 ng-hide="task.showEditMenu">status: {{task.taskState}}</h4>
+            <h4 ng-hide="task.showEditMenu">{{getStateName(task)}}</h4>
             <label for="moveTo" ng-show="task.showEditMenu">move to state:</label>
             <select id="moveTo"
                     ng-model="task.taskState"
@@ -19,14 +22,14 @@
                     ng-show="task.showEditMenu">
             </select>
 
-            <p ng-hide="task.showEditMenu">description: {{task.description}}</p>
-            <input type="text" ng-model="task.description" ng-show="task.showEditMenu">
+            <div ng-hide="task.showEditMenu" class="task__description">description: {{task.description}}</div>
+            <textarea id="" cols="21" rows="5" ng-model="task.description" ng-show="task.showEditMenu"></textarea>
 
             <p ng-hide="task.showEditMenu">hours: {{task.hours}}</p>
             <input type="number" ng-model="task.hours" ng-show="task.showEditMenu">
 
             <button class="edit-btn" ng-click="editTask(task)">
-                {{task.showEditMenu ? 'close edit' : 'edit task'}}
+                {{task.showEditMenu ? 'Submit' : 'Edit'}}
             </button>
 
             <button class="delete-btn" ng-click="deleteTask(task)">X</button>

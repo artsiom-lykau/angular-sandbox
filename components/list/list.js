@@ -8,26 +8,43 @@ angular.module('myApp')
             let showTasksByState = sharedService.showTasksByState;
             $scope.showTasksByState = sharedService.showTasksByState;
 
-            $scope.$watch(function () {
-                return sharedService.tasksToShow
-            }, function () {
-                $scope.tasksToShow = sharedService.tasksToShow;
-                if ($scope.tasksToShow) {
-                    $scope.tasksToShow.data.forEach(item => item.showEditMenu = false);
-                }
-            });
+            $scope.$watch(() => sharedService.tasksToShow,
+                function () {
+                    $scope.tasksToShow = sharedService.tasksToShow;
+                });
 
             getDataService()
                 .then(results => {
                     sharedService.todos = results[0].data;
                     sharedService.states = results[1].data;
                     $scope.states = results[1].data;
+                    /*$timeout*/
                     showTasksByState('all');
                 });
+
+            $scope.getStateName = function (task) {
+                return task.taskState
+                    .replace(/([A-Z])/, ' $1')
+                    .replace(/^./, str => str.toUpperCase());
+            };
 
             $scope.getOrderProp = function () {
                 $scope.orderProp = sharedService.orderProp;
                 $scope.descOrder = sharedService.descOrder;
+                if ($scope.orderProp == 'status') {
+                    return function statesOrder(task) {
+                        switch (task.taskState) {
+                            case 'todo':
+                                return 0;
+                            case 'inProgress':
+                                return 1;
+                            case 'testing':
+                                return 2;
+                            case 'done':
+                                return 3;
+                        }
+                    }
+                }
                 return $scope.orderProp
             };
 
@@ -35,8 +52,8 @@ angular.module('myApp')
                 task.showEditMenu = !task.showEditMenu;
 
                 if (task.showEditMenu == false) {
-                    delete task.showEditMenu;
                     $http.put(`/api/update-task/${task._id}`, task);
+                    showTasksByState($scope.selectedState);
                 }
             };
 

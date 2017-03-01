@@ -16,17 +16,17 @@ angular.module('myApp')
                 $http.post('/api/create-task', newTask)
             };
 
-            $scope.$watch(function () {
-                return sharedService.states
-            }, function () {
-                if (!sharedService.states) {
-                    getDataService()
-                        .then(res => {
-                            sharedService.states = res[1].data;
-                        })
-                }
-                $scope.states = sharedService.states;
-            });
+            $scope.$watch(() => sharedService.states,
+                function () {
+                    if (!sharedService.states) {
+                        getDataService()
+                            .then(res => {
+                                sharedService.states = res[1].data;
+                            })
+                    }
+                    $scope.states = sharedService.states;
+                });
+
         }])
     .directive('inputTemplate', function () {
         return {

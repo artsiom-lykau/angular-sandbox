@@ -39,16 +39,19 @@ angular.module('myApp', ['ui.router'])
             name: 'list',
             url: '/',
             templateUrl: './components/list/list-template.html',
-            controller: 'ListController',
-            controllerAs: 'listCtrl'
+            controller: 'ListController'
         };
 
         let inputState = {
-            /***** CHANGE TO STICKY STATE *****/
-            name: 'addNew',
-            url: '/addnew',
-            templateUrl: './components/input/input-template.html',
-            controller: 'InputController'
+            name: 'list.addNew',
+            url: 'addnew',
+            sticky: true,
+            views: {
+                'addNew': {
+                    templateUrl: './components/input/input-template.html',
+                    controller: 'InputController'
+                }
+            },
         };
 
         $stateProvider.state(listState);

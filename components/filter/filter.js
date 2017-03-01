@@ -7,18 +7,17 @@ angular.module('myApp')
         function ($scope, sharedService) {
             $scope.showTasksByState = sharedService.showTasksByState;
 
-            $scope.$watch(function () {
-                return sharedService.states
-            }, function () {
-                if (sharedService.states) {
-                    $scope.filterOptions = sharedService.states.slice();
-                    $scope.filterOptions.unshift({title: 'All', state: 'all'});
-                }
-            });
+            $scope.$watch(() => sharedService.states,
+                function () {
+                    if (sharedService.states) {
+                        $scope.filterOptions = sharedService.states.slice();
+                        $scope.filterOptions.unshift({title: 'All', state: 'all'});
+                    }
+                });
 
-            $scope.setOrderProp = function (orderProp, descOrder) {
-                sharedService.orderProp = orderProp;
-                sharedService.descOrder = descOrder;
+            $scope.setOrderProp = function () {
+                sharedService.orderProp = $scope.orderProp;
+                sharedService.descOrder = $scope.descOrder;
             }
 
         }])
