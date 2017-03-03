@@ -1,7 +1,7 @@
-var webpack = require('webpack');
-var path = require('path');
-var WebpackCleanupPlugin = require('webpack-cleanup-plugin');
-var WebpackUglifyJsPlugin = require('webpack-uglify-js-plugin');
+let webpack = require('webpack');
+let path = require('path');
+let WebpackCleanupPlugin = require('webpack-cleanup-plugin');
+let WebpackUglifyJsPlugin = require('webpack-uglify-js-plugin');
 
 module.exports = {
     context: __dirname,

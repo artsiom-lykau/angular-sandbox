@@ -1,14 +1,15 @@
 <div class="filter">
     <form>
-        <a ui-sref="list.addNew">add new task</a>
-        <label for="filter">show task by state:</label>
+        <a ui-sref="list.addNew" class="filter__add-new">Add new task</a>
+
+        <label for="filter">Show task by state:</label>
         <select id="filter"
                 ng-model="selectedState"
                 ng-change="showTasksByState(selectedState)"
                 ng-options="option.state as option.title for option in filterOptions">
         </select>
 
-        <label for="order-by">select prop to sort:</label>
+        <label for="order-by">Select property to sort:</label>
         <select id="order-by"
                 ng-change="setOrderProp()"
                 ng-model="orderProp">
@@ -17,7 +18,8 @@
             <option value="createTime">Creation time</option>
             <option value="status">Status</option>
         </select>
-        <label for="desc-order">check to desc. order:</label>
+
+        <label for="desc-order" class="filter__label-checkbox">Check to desc. order:</label>
         <input id="desc-order"
                type="checkbox"
                ng-model="descOrder"

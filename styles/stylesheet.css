@@ -34,6 +34,10 @@ button {
     font-family: 'Lato', sans-serif;
 }
 
+input, select, button, textarea {
+    padding: 7px;
+}
+
 /******* end of common styles *******/
 
 .list-container {
@@ -45,16 +49,34 @@ button {
     top: 20px;
     right: 20px;
     padding: 10px;
-    width: 200px;
     background-color: wheat;
+    width: 200px;
 }
 
 .filter * {
+    display: block;
+}
+
+.filter__add-new {
+    margin-bottom: 20px;
+}
+
+.filter label {
+    margin-bottom: 5px;
+}
+
+.filter select {
+    width: 120px;
+    margin-bottom: 15px;
+}
+
+.filter__label-checkbox {
     display: inline-block;
 }
 
-form *:not(label) {
-    padding: 7px;
+.filter input {
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .task {
