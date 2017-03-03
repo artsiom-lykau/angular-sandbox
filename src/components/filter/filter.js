@@ -25,6 +25,6 @@ angular.module('myApp')
         return {
             restrict: 'E',
             controller: 'filterController',
-            templateUrl: './components/filter/filter-template.html'
+            template: require('./filter-template.html')
         }
     });

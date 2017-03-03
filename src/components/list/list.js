@@ -18,7 +18,7 @@ angular.module('myApp')
                     sharedService.todos = results[0].data;
                     sharedService.states = results[1].data;
                     $scope.states = results[1].data;
-                    /*$timeout*/
+                    // $timeout
                     showTasksByState('all');
                 });
 

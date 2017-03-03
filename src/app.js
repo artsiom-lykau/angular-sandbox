@@ -29,16 +29,16 @@ angular.module('myApp', ['ui.router'])
     .factory('getDataService', ['$http', '$q', function ($http, $q) {
         return function () {
             return $q.all([
-                $http.get('/api/all-tasks'),
+                $http.get('./api/all-tasks'),
                 $http.get('./data/states.json')
             ]);
         }
     }])
-    .config(function ($stateProvider, $urlRouterProvider) {
+    .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
         let listState = {
             name: 'list',
             url: '/',
-            templateUrl: './components/list/list-template.html',
+            template: require('./components/list/list-template.html'),
             controller: 'ListController'
         };
 
@@ -48,7 +48,7 @@ angular.module('myApp', ['ui.router'])
             sticky: true,
             views: {
                 'addNew': {
-                    templateUrl: './components/input/input-template.html',
+                    template: require('./components/input/input-template.html'),
                     controller: 'InputController'
                 }
             },
@@ -58,4 +58,4 @@ angular.module('myApp', ['ui.router'])
         $stateProvider.state(inputState);
 
         $urlRouterProvider.otherwise('/');
-    });
+    }]);
