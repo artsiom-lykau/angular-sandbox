@@ -18,6 +18,22 @@ button {
     background-color: inherit;
 }
 
+::-webkit-input-placeholder {
+    font-family: 'Lato', sans-serif;
+}
+
+:-moz-placeholder {
+    font-family: 'Lato', sans-serif;
+}
+
+::-moz-placeholder {
+    font-family: 'Lato', sans-serif;
+}
+
+:-ms-input-placeholder {
+    font-family: 'Lato', sans-serif;
+}
+
 /******* end of common styles *******/
 
 .list-container {
@@ -97,16 +113,14 @@ form *:not(label) {
 
 .input-form button {
     background-color: mistyrose;
-    margin-top: 30px;
+    margin-top: 15px;
 }
 
 .input-popup {
     position: fixed;
-    width: 200px;
-    height: 200px;
     top: calc(50% - 200px);
     left: calc(50% - 200px);
-    padding: 20px;
+    padding: 25px;
     z-index: 10;
     background-color: wheat;
 }
@@ -128,4 +142,20 @@ form *:not(label) {
     right: 0;
     padding: 5px;
     cursor: pointer;
+}
+
+.input-popup__descr {
+    float: left;
+    margin-right: 15px;
+    max-width: 320px;
+    max-height: 270px;
+    height: 147px;
+}
+
+.input-popup__name, .input-popup__hours {
+    margin-bottom: 10px;
+}
+
+.input-popup__state-label {
+    margin-bottom: 10px;
 }

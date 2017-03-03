@@ -30,7 +30,7 @@ module.exports = {
     plugins: [
         new WebpackCleanupPlugin(),
         new WebpackUglifyJsPlugin({
-            cacheFolder: path.resolve(__dirname, './src/cached_uglify/'),
+            cacheFolder: path.resolve(__dirname, './cached_uglify/'),
             debug: true,
             minimize: true,
             output: {

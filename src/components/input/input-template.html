@@ -2,14 +2,32 @@
 <div class="input-popup">
     <div ui-sref="list" class="input-popup__close-btn">X</div>
     <form class="input-form">
-        <input placeholder="name" type="text" name="name" ng-model="newTask.name">
-        <input placeholder="description" type="text" name="description" ng-model="newTask.description">
-        <input placeholder="hours" type="number" name="hours" ng-model="newTask.hours">
-        <label for="newTask">select task state:</label>
+        <textarea placeholder="Description"
+                  cols="25"
+                  rows="9"
+                  name="description"
+                  ng-model="newTask.description"
+                  class="input-popup__descr">
+        </textarea>
+
+        <input placeholder="Name"
+               type="text"
+               name="name"
+               ng-model="newTask.name"
+               class="input-popup__name">
+
+        <input placeholder="Hours"
+               type="number"
+               name="hours"
+               ng-model="newTask.hours"
+               class="input-popup__hours">
+
         <select id="newTask"
                 ng-model="newTask.taskState"
                 ng-options="state.state as state.title for state in states">
+            <option value="">--- Select task state ---</option>
         </select>
-        <button ng-click="addNewTask(newTask)">add new task</button>
+
+        <button ng-click="addNewTask(newTask)">Add new task</button>
     </form>
 </div>
