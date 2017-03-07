@@ -3,9 +3,25 @@
  */
 
 angular.module('myApp')
-    .controller('filterController', ['$scope', 'sharedService',
-        function ($scope, sharedService) {
+    .controller('filterController', ['$scope', 'sharedService', '$uibModal',
+        function ($scope, sharedService,$uibModal) {
             $scope.showTasksByState = sharedService.showTasksByState;
+
+            /*$scope.open = function (size, parentSelector) {
+                let modalInstance = $uibModal.open({
+                    animation: true,
+                    ariaLabelledBy: 'modal-title',
+                    ariaDescribedBy: 'modal-body',
+                    template: require('../input/input-template.html'),
+                    controller: 'InputController',
+                    // appendTo: parentElem,
+                    resolve: {
+                        items: function () {
+                            return $scope.items;
+                        }
+                    }
+                });
+            };*/
 
             $scope.$watch(() => sharedService.states,
                 function () {
@@ -18,8 +34,7 @@ angular.module('myApp')
             $scope.setOrderProp = function () {
                 sharedService.orderProp = $scope.orderProp;
                 sharedService.descOrder = $scope.descOrder;
-            }
-
+            };
         }])
     .directive('filterTemplate', function () {
         return {

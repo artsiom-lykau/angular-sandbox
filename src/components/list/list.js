@@ -50,14 +50,17 @@ angular.module('myApp')
 
             $scope.editTask = function (task) {
                 task.showEditMenu = !task.showEditMenu;
-
-                if (task.showEditMenu == false) {
+                if (!task.showEditMenu) {
                     $http.put(`/api/update-task/${task._id}`, task);
                     showTasksByState($scope.selectedState);
                 }
             };
 
-            $scope.deleteTask = function (task) {
+            $scope.deleteTask = function (task, e) {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
                 sharedService.todos.splice(sharedService.todos.indexOf(task), 1);
                 showTasksByState(sharedService.selectedState);
                 $http.delete(`/api/delete-task/${task._id}`, task);

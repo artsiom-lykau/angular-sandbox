@@ -1,28 +1,36 @@
-<div class="filter">
-    <form>
-        <a ui-sref="list.addNew" class="filter__add-new">Add new task</a>
+<form class="navbar-form filter">
+    <button ui-sref="list.addNew"
+            ng-click=""
+            class="btn btn-primary filter__add-new">
+        Add new task
+    </button>
 
-        <label for="filter">Show task by state:</label>
-        <select id="filter"
-                ng-model="selectedState"
-                ng-change="showTasksByState(selectedState)"
-                ng-options="option.state as option.title for option in filterOptions">
-        </select>
+    <select id="filter"
+            class="form-control"
+            ng-model="selectedState"
+            ng-change="showTasksByState(selectedState)"
+            ng-options="option.state as option.title for option in filterOptions">
+        <option value="">--- Show task by state ---</option>
+    </select>
 
-        <label for="order-by">Select property to sort:</label>
-        <select id="order-by"
-                ng-change="setOrderProp()"
-                ng-model="orderProp">
-            <option value="name">Task name</option>
-            <option value="hours">Hours</option>
-            <option value="createTime">Creation time</option>
-            <option value="status">Status</option>
-        </select>
+    <select id="order-by"
+            class="form-control"
+            ng-change="setOrderProp()"
+            ng-model="orderProp">
+        <option value="">--- Select property to sort ---</option>
+        <option value="name">Task name</option>
+        <option value="hours">Hours</option>
+        <option value="createTime">Creation time</option>
+        <option value="status">Status</option>
+    </select>
 
-        <label for="desc-order" class="filter__label-checkbox">Check to desc. order:</label>
-        <input id="desc-order"
-               type="checkbox"
-               ng-model="descOrder"
-               ng-change="setOrderProp()">
-    </form>
-</div>
+    <button type="button"
+            class="btn btn-info"
+            ng-model="descOrder"
+            uib-btn-checkbox
+            btn-checkbox-true="1"
+            btn-checkbox-false="0"
+            ng-change="setOrderProp()">
+        Click to desc. order
+    </button>
+</form>

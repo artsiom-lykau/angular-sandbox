@@ -2,7 +2,11 @@
  * Created by lykovartem on 2/16/2017.
  */
 
-angular.module('myApp', ['ui.router'])
+angular.module('myApp', [
+    'ui.router',
+    'ngAnimate',
+    'ui.bootstrap'
+])
     .factory('sharedService', ['$filter', function ($filter) {
         let sharedService = {
             showTasksByState: function (selectedState = 'all') {
@@ -34,28 +38,29 @@ angular.module('myApp', ['ui.router'])
             ]);
         }
     }])
-    .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
-        let listState = {
-            name: 'list',
-            url: '/',
-            template: require('./components/list/list-template.html'),
-            controller: 'ListController'
-        };
+    .config(['$stateProvider', '$urlRouterProvider',
+        function ($stateProvider, $urlRouterProvider) {
+            let listState = {
+                name: 'list',
+                url: '/',
+                template: require('./components/list/list-template.html'),
+                controller: 'ListController'
+            };
 
-        let inputState = {
-            name: 'list.addNew',
-            url: 'addnew',
-            sticky: true,
-            views: {
-                'addNew': {
-                    template: require('./components/input/input-template.html'),
-                    controller: 'InputController'
+            let inputState = {
+                name: 'list.addNew',
+                url: 'addnew',
+                sticky: true,
+                views: {
+                    'addNew': {
+                        template: require('./components/input/input-template.html'),
+                        controller: 'InputController'
+                    }
                 }
-            },
-        };
+            };
 
-        $stateProvider.state(listState);
-        $stateProvider.state(inputState);
+            $stateProvider.state(listState);
+            $stateProvider.state(inputState);
 
-        $urlRouterProvider.otherwise('/');
-    }]);
+            $urlRouterProvider.otherwise('/');
+        }]);

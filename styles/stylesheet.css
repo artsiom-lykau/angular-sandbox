@@ -7,15 +7,8 @@ h1, h2, h3, h4, h5, h6, p {
     margin: 0;
 }
 
-ul {
-    list-style: none;
-    padding: 0;
-}
-
-button {
-    cursor: pointer;
-    border: 0;
-    background-color: inherit;
+textarea {
+    font-family: 'Lato', sans-serif;
 }
 
 ::-webkit-input-placeholder {
@@ -34,83 +27,59 @@ button {
     font-family: 'Lato', sans-serif;
 }
 
-input, select, button, textarea {
-    padding: 7px;
-}
-
 /******* end of common styles *******/
 
 .list-container {
     padding: 20px;
 }
 
-.filter {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 10px;
-    background-color: wheat;
-    width: 200px;
-}
-
-.filter * {
-    display: block;
-}
-
-.filter__add-new {
-    margin-bottom: 20px;
-}
-
-.filter label {
-    margin-bottom: 5px;
-}
-
-.filter select {
-    width: 120px;
-    margin-bottom: 15px;
-}
-
-.filter__label-checkbox {
-    display: inline-block;
-}
-
-.filter input {
-    display: inline-block;
-    vertical-align: middle;
+.filter *:not(:last-child) {
+    margin-right: 10px;
 }
 
 .task {
     padding: 10px;
-    line-height: 1.5rem;
     width: 50%;
     position: relative;
 }
 
-.task .edit-btn {
-    background-color: darkgoldenrod;
-    position: relative;
-    padding: 7px;
-    margin-top: 5px;
-}
-
-.task .delete-btn {
+.task__delete-btn {
     position: absolute;
-    top: 0;
-    right: 0;
-    padding: 10px;
+    top: 27px;
+    right: 18px;
 }
 
-.task input, .task textarea {
-    display: block;
+.task input, .task select {
+    width: auto;
 }
 
-.task label {
-    display: block;
+.task__name-editor {
+    margin-bottom: 5px;
+}
+
+.task__edit-btn {
+    margin-top: 8px;
 }
 
 .task__description {
     width: 300px;
     word-wrap: break-word;
+}
+
+.task__description-editor {
+    float: left;
+    margin-right: 15px;
+    max-width: 320px;
+    max-height: 270px;
+}
+
+.task__state {
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.task__state-editor {
+    margin-bottom: 5px;
 }
 
 .done-clr {
@@ -145,6 +114,7 @@ input, select, button, textarea {
     padding: 25px;
     z-index: 10;
     background-color: wheat;
+    border-radius: 4px;
 }
 
 .popup-background {
