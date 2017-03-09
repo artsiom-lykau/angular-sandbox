@@ -1,33 +1,37 @@
 <div class="popup-background" ui-sref="list"></div>
-<div class="input-popup">
-    <div ui-sref="list" class="input-popup__close-btn">X</div>
-    <form class="input-form">
+<form class="input-popup">
         <textarea placeholder="Description"
                   cols="25"
                   rows="9"
                   name="description"
                   ng-model="newTask.description"
-                  class="input-popup__descr">
+                  class="input-popup__descr form-control">
         </textarea>
 
-        <input placeholder="Name"
-               type="text"
-               name="name"
-               ng-model="newTask.name"
-               class="input-popup__name">
+    <select id="newTask"
+            class="input-popup__state form-control"
+            ng-model="newTask.taskState"
+            ng-options="state.state as state.title for state in states">
+        <option value="">--- Select task state ---</option>
+    </select>
 
-        <input placeholder="Hours"
-               type="number"
-               name="hours"
-               ng-model="newTask.hours"
-               class="input-popup__hours">
+    <input placeholder="Name"
+           type="text"
+           name="name"
+           ng-model="newTask.name"
+           class="input-popup__name form-control">
 
-        <select id="newTask"
-                ng-model="newTask.taskState"
-                ng-options="state.state as state.title for state in states">
-            <option value="">--- Select task state ---</option>
-        </select>
+    <input placeholder="Hours"
+           type="number"
+           name="hours"
+           ng-model="newTask.hours"
+           class="input-popup__hours form-control">
 
-        <button ng-click="addNewTask(newTask)">Add new task</button>
-    </form>
-</div>
+    <button ng-click="addNewTask(newTask)"
+            class="input-popup__add-btn btn btn-primary">Add new task
+    </button>
+
+    <button ui-sref="list"
+            class="input-popup__cancel-btn btn btn-warning">Cancel
+    </button>
+</form>

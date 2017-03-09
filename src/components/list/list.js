@@ -3,8 +3,8 @@
  */
 
 angular.module('myApp')
-    .controller('ListController', ['sharedService', 'getDataService', '$scope', '$http',
-        function (sharedService, getDataService, $scope, $http) {
+    .controller('ListController', ['sharedService', 'dataService', '$scope', '$http',
+        function (sharedService, dataService, $scope) {
             let showTasksByState = sharedService.showTasksByState;
             $scope.showTasksByState = sharedService.showTasksByState;
 
@@ -13,12 +13,11 @@ angular.module('myApp')
                     $scope.tasksToShow = sharedService.tasksToShow;
                 });
 
-            getDataService()
+            dataService.getTasksAndStates()
                 .then(results => {
                     sharedService.todos = results[0].data;
                     sharedService.states = results[1].data;
                     $scope.states = results[1].data;
-                    // $timeout
                     showTasksByState('all');
                 });
 
@@ -28,10 +27,25 @@ angular.module('myApp')
                     .replace(/^./, str => str.toUpperCase());
             };
 
+            $scope.showOrderProp = function (task) {
+                $scope.orderProp = sharedService.orderProp;
+                switch ($scope.orderProp) {
+                    case 'taskState':
+                        return $scope.getStateName(task);
+                    case 'hours':
+                        return `Hours: ${task.hours}`;
+                    case 'name':
+                        return '';
+                    case 'createTime':
+                        let date = new Date(task.createTime);
+                        return date.toLocaleString();
+                }
+            };
+
             $scope.getOrderProp = function () {
                 $scope.orderProp = sharedService.orderProp;
                 $scope.descOrder = sharedService.descOrder;
-                if ($scope.orderProp == 'status') {
+                if ($scope.orderProp == 'taskState') {
                     return function statesOrder(task) {
                         switch (task.taskState) {
                             case 'todo':
@@ -50,8 +64,8 @@ angular.module('myApp')
 
             $scope.editTask = function (task) {
                 task.showEditMenu = !task.showEditMenu;
-                if (!task.showEditMenu) {
-                    $http.put(`/api/update-task/${task._id}`, task);
+                if (!task.showEditMenu && task.name && task.taskState) {
+                    dataService.editTask(task);
                     showTasksByState($scope.selectedState);
                 }
             };
@@ -63,7 +77,7 @@ angular.module('myApp')
                 }
                 sharedService.todos.splice(sharedService.todos.indexOf(task), 1);
                 showTasksByState(sharedService.selectedState);
-                $http.delete(`/api/delete-task/${task._id}`, task);
+                dataService.deleteTask(task);
             };
 
         }])

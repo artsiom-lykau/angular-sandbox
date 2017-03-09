@@ -30,12 +30,23 @@ angular.module('myApp', [
         };
         return sharedService;
     }])
-    .factory('getDataService', ['$http', '$q', function ($http, $q) {
-        return function () {
-            return $q.all([
-                $http.get('./api/all-tasks'),
-                $http.get('./data/states.json')
-            ]);
+    .factory('dataService', ['$http', '$q', function ($http, $q) {
+        return {
+            getTasksAndStates: function () {
+                return $q.all([
+                    $http.get('./api/all-tasks'),
+                    $http.get('./data/states.json')
+                ]);
+            },
+            addNewTask: function (task) {
+                return $http.post('/api/create-task', task);
+            },
+            editTask: function (task) {
+                return $http.put(`/api/update-task/${task._id}`, task);
+            },
+            deleteTask: function (task) {
+                return $http.delete(`/api/delete-task/${task._id}`, task);
+            }
         }
     }])
     .config(['$stateProvider', '$urlRouterProvider',

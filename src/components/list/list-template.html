@@ -1,8 +1,6 @@
-<div ui-view="addNew"></div>
-
-<div uib-accordion class="list-container">
-
-    <div class="panel panel-default">
+<div uib-accordion
+     class="app-container">
+    <div class="header panel panel-default">
         <div class="panel-heading">
             <h1>{{tasksToShow.header}}</h1>
         </div>
@@ -11,68 +9,77 @@
         </div>
     </div>
 
-    <uib-accordion-group class="task"
-                         ng-repeat="task in tasksToShow.data | orderBy: getOrderProp() : descOrder track by $index"
-                         ng-init="task.showEditMenu = false">
+    <div class="list-container">
+        <uib-accordion-group class="task"
+                             ng-repeat="task in tasksToShow.data | orderBy: getOrderProp() : descOrder track by $index"
+                             ng-init="task.showEditMenu = false">
 
-        <div uib-accordion-group
-             class="task"
-             ng-class="{'todo-clr': task.taskState == 'todo',
+            <div uib-accordion-group
+                 class="task"
+                 ng-class="{'todo-clr': task.taskState == 'todo',
                        'in-progress-clr': task.taskState == 'inProgress',
                        'testing-clr': task.taskState == 'testing',
                        'done-clr': task.taskState == 'done'}">
 
-            <uib-accordion-heading>
-                <h3 class="task__name">{{task.name}}</h3>
-                <i class="glyphicon glyphicon-remove task__delete-btn"
-                   ng-click="deleteTask(task, $event)">
-                </i>
-            </uib-accordion-heading>
+                <uib-accordion-heading>
+                    <h3 class="task__name">
+                        {{task.name}}
+                        <small class="task__order-prop">{{showOrderProp(task)}}</small>
+                    </h3>
+                    <i class="glyphicon glyphicon-remove task__delete-btn"
+                       ng-click="deleteTask(task, $event)">
+                    </i>
+                </uib-accordion-heading>
 
-            <textarea placeholder="Description"
-                      class="task__description-editor form-control"
-                      cols="30"
-                      rows="7"
-                      ng-model="task.description"
-                      ng-show="task.showEditMenu"></textarea>
+                <textarea placeholder="Description"
+                          class="task__description-editor form-control"
+                          cols="30"
+                          rows="7"
+                          ng-model="task.description"
+                          ng-show="task.showEditMenu"></textarea>
 
-            <input type="text"
-                   class="task__name-editor form-control"
-                   placeholder="Name"
-                   ng-model="task.name"
-                   ng-show="task.showEditMenu">
+                <input type="text"
+                       class="task__name-editor form-control"
+                       placeholder="Name"
+                       ng-model="task.name"
+                       ng-show="task.showEditMenu">
 
-            <h4 ng-hide="task.showEditMenu"
-                class="task__state">
-                {{getStateName(task)}}
-            </h4>
+                <h4 ng-hide="task.showEditMenu"
+                    class="task__state">
+                    {{getStateName(task)}}
+                </h4>
 
-            <select id="moveTo"
-                    class="task__state-editor form-control"
-                    ng-model="task.taskState"
-                    ng-options="state.state as state.title for state in states"
-                    ng-show="task.showEditMenu">
-            </select>
+                <select id="moveTo"
+                        class="task__state-editor form-control"
+                        ng-model="task.taskState"
+                        ng-options="state.state as state.title for state in states"
+                        ng-show="task.showEditMenu">
+                </select>
 
+                <p ng-hide="task.showEditMenu">Hours: {{task.hours}}</p>
+                <input placeholder="Hours"
+                       class="form-control"
+                       type="number"
+                       ng-model="task.hours"
+                       ng-show="task.showEditMenu">
 
-            <p ng-hide="task.showEditMenu">Hours: {{task.hours}}</p>
-            <input placeholder="Hours"
-                   class="form-control"
-                   type="number"
-                   ng-model="task.hours"
-                   ng-show="task.showEditMenu">
+                <div ng-hide="task.showEditMenu"
+                     class="task__description">
+                    Description: {{task.description}}
+                </div>
 
-            <div ng-hide="task.showEditMenu"
-                 class="task__description">
-                Description: {{task.description}}
+                <button class="btn btn-warning task__edit-btn"
+                        ng-click="editTask(task)">
+                    {{task.showEditMenu ? 'Submit' : 'Edit'}}
+                </button>
             </div>
+        </uib-accordion-group>
+    </div>
 
-            <button class="btn btn-warning task__edit-btn"
-                    ng-click="editTask(task)">
-                {{task.showEditMenu ? 'Submit' : 'Edit'}}
-            </button>
-        </div>
-    </uib-accordion-group>
+</div>
+
+<div class="ui-view-container">
+    <div ui-view="addNew"></div>
 </div>
 
 <!--

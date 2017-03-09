@@ -3,23 +3,24 @@
  */
 
 angular.module('myApp')
-    .controller('InputController', ['sharedService', '$scope', '$http', 'getDataService',
-        function (sharedService, $scope, $http, getDataService) {
+    .controller('InputController', ['sharedService', '$scope', 'dataService',
+        function (sharedService, $scope, dataService) {
             $scope.showTasksByState = sharedService.showTasksByState;
 
             $scope.addNewTask = function (newTask) {
                 newTask.createTime = Date.now();
-                sharedService.todos.push(newTask);
-                $scope.showTasksByState($scope.selectedState);
-                $scope.newTask = {};
-
-                $http.post('/api/create-task', newTask)
+                if (newTask.name && newTask.taskState) {
+                    sharedService.todos.push(newTask);
+                    $scope.showTasksByState($scope.selectedState);
+                    dataService.addNewTask(newTask);
+                    $scope.newTask = {};
+                }
             };
 
             $scope.$watch(() => sharedService.states,
                 function () {
                     if (!sharedService.states) {
-                        getDataService()
+                        dataService.getTasksAndStates()
                             .then(res => {
                                 sharedService.states = res[1].data;
                             })

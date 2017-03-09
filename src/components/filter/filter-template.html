@@ -1,6 +1,5 @@
 <form class="navbar-form filter">
     <button ui-sref="list.addNew"
-            ng-click=""
             class="btn btn-primary filter__add-new">
         Add new task
     </button>
@@ -8,7 +7,7 @@
     <select id="filter"
             class="form-control"
             ng-model="selectedState"
-            ng-change="showTasksByState(selectedState)"
+            ng-change="showTasksByState(selectedState || 'all')"
             ng-options="option.state as option.title for option in filterOptions">
         <option value="">--- Show task by state ---</option>
     </select>
@@ -21,7 +20,7 @@
         <option value="name">Task name</option>
         <option value="hours">Hours</option>
         <option value="createTime">Creation time</option>
-        <option value="status">Status</option>
+        <option value="taskState">Task state</option>
     </select>
 
     <button type="button"

@@ -3,31 +3,14 @@
  */
 
 angular.module('myApp')
-    .controller('filterController', ['$scope', 'sharedService', '$uibModal',
-        function ($scope, sharedService,$uibModal) {
+    .controller('filterController', ['$scope', 'sharedService',
+        function ($scope, sharedService) {
             $scope.showTasksByState = sharedService.showTasksByState;
-
-            /*$scope.open = function (size, parentSelector) {
-                let modalInstance = $uibModal.open({
-                    animation: true,
-                    ariaLabelledBy: 'modal-title',
-                    ariaDescribedBy: 'modal-body',
-                    template: require('../input/input-template.html'),
-                    controller: 'InputController',
-                    // appendTo: parentElem,
-                    resolve: {
-                        items: function () {
-                            return $scope.items;
-                        }
-                    }
-                });
-            };*/
 
             $scope.$watch(() => sharedService.states,
                 function () {
                     if (sharedService.states) {
                         $scope.filterOptions = sharedService.states.slice();
-                        $scope.filterOptions.unshift({title: 'All', state: 'all'});
                     }
                 });
 

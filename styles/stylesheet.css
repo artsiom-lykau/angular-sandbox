@@ -29,8 +29,14 @@ textarea {
 
 /******* end of common styles *******/
 
-.list-container {
+.app-container {
     padding: 20px;
+}
+
+.list-container {
+}
+
+.header {
 }
 
 .filter *:not(:last-child) {
@@ -41,6 +47,16 @@ textarea {
     padding: 10px;
     width: 50%;
     position: relative;
+}
+
+.task__name {
+    display: inline-block;
+}
+
+.task__order-prop {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 70%;
 }
 
 .task__delete-btn {
@@ -83,7 +99,7 @@ textarea {
 }
 
 .done-clr {
-    background-color: seagreen;
+    background-color: rgb(35, 152, 87);
 }
 
 .todo-clr {
@@ -98,23 +114,18 @@ textarea {
     background-color: lightseagreen;
 }
 
-.input-form * {
-    display: block;
-}
-
-.input-form button {
-    background-color: mistyrose;
-    margin-top: 15px;
-}
-
 .input-popup {
     position: fixed;
     top: calc(50% - 200px);
     left: calc(50% - 200px);
     padding: 25px;
     z-index: 10;
-    background-color: wheat;
+    background-color: #fff;
     border-radius: 4px;
+}
+
+.input-popup * {
+    width: auto;
 }
 
 .popup-background {
@@ -122,32 +133,55 @@ textarea {
     width: 100%;
     height: 100%;
     top: 0;
+    bottom: 0;
     left: 0;
-    background-color: #000000;
+    background-color: #000;
     opacity: .7;
     z-index: 5;
-}
-
-.input-popup__close-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 5px;
-    cursor: pointer;
 }
 
 .input-popup__descr {
     float: left;
     margin-right: 15px;
-    max-width: 320px;
+    max-width: 218px;
     max-height: 270px;
     height: 147px;
 }
 
-.input-popup__name, .input-popup__hours {
+.input-popup__name,
+.input-popup__hours,
+.input-popup__state {
     margin-bottom: 10px;
+    width: 183px;
 }
 
-.input-popup__state-label {
-    margin-bottom: 10px;
+.input-popup__cancel-btn {
+    margin-left: 4px;
+}
+
+.ui-view-container {
+    position: fixed;
+    top: calc(50% - 200px);
+    left: calc(50% - 200px);
+}
+
+[ui-view="addNew"].ng-enter,
+[ui-view="addNew"].ng-leave {
+    transition: all .3s ease-in-out;
+}
+
+[ui-view="addNew"].ng-enter {
+    opacity: 0;
+}
+
+[ui-view="addNew"].ng-enter-active {
+    opacity: 1;
+}
+
+[ui-view="addNew"].ng-leave {
+    opacity: 1;
+}
+
+[ui-view="addNew"].ng-leave-active {
+    opacity: 0;
 }
