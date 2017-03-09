@@ -26,7 +26,8 @@ angular.module('myApp', [
                 };
 
                 sharedService.selectedState = selectedState;
-            }
+            },
+            isLoggedIn: false
         };
         return sharedService;
     }])
@@ -49,6 +50,27 @@ angular.module('myApp', [
             }
         }
     }])
+    .factory('AuthenticationService', ['$http',
+        function ($http) {
+            return {
+                login: function (username, password, callback) {
+                    $http.post('/api/log-in', {username, password})
+                        .then(res => {
+                            if (callback) {
+                                callback(res)
+                            }
+                        })
+                },
+                register: function (username, password, callback) {
+                    $http.post('/api/register', {username, password})
+                        .then(res => {
+                            if (callback) {
+                                callback(res)
+                            }
+                        })
+                }
+            }
+        }])
     .config(['$stateProvider', '$urlRouterProvider',
         function ($stateProvider, $urlRouterProvider) {
             let listState = {
@@ -70,8 +92,20 @@ angular.module('myApp', [
                 }
             };
 
+            let authState = {
+                name: 'auth',
+                url: '/auth',
+                template: require('./components/auth/auth-template.html'),
+                controller: 'AuthController'
+            };
+
             $stateProvider.state(listState);
             $stateProvider.state(inputState);
+            $stateProvider.state(authState);
 
             $urlRouterProvider.otherwise('/');
+        }])
+    .run(['$state', 'sharedService',
+        function ($state, sharedService) {
+            if (!sharedService.isLoggedIn) $state.go('auth')
         }]);

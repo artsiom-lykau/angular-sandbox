@@ -6,3 +6,4 @@ require('./app');
 require('./components/filter/filter');
 require('./components/input/input');
 require('./components/list/list');
+require('./components/auth/auth');

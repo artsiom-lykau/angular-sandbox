@@ -32,6 +32,23 @@ let TaskModel = mongoose.model('TaskModel', {
 });
 
 // routes ========================
+
+app.post('/api/log-in', function (req, res) {
+    let data = req.body;
+    let newTask = new TaskModel(data);
+    newTask.save(function (err) {
+        if (err) return handleError(err);
+    });
+});
+
+app.post('/api/register', function (req, res) {
+    let username = req.body.username;
+    let password = req.body.password;
+    newTask.save(function (err) {
+        if (err) return handleError(err);
+    });
+});
+
 app.get('/api/all-tasks', function (req, res) {
     TaskModel.find(function (err, tasks) {
         if (err) return handleError(err);
