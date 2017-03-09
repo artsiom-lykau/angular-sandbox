@@ -6,9 +6,13 @@
 let express = require('express');
 let app = express();
 let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
 let morgan = require('morgan');                     // log requests to the console (express4)
 let bodyParser = require('body-parser');            // pull information from HTML POST (express4)
 let methodOverride = require('method-override');    // simulate DELETE and PUT (express4)
+
+let bcrypt = require('bcrypt');
+const SALT_WORK_FACTOR = 10;
 
 // configuration =================
 const PORT = 8080;
@@ -22,43 +26,105 @@ app.use(bodyParser.json());                                     // parse applica
 app.use(methodOverride());
 
 // define model ==================
-let TaskModel = mongoose.model('TaskModel', {
+
+let TaskSchema = new Schema({
     name: String,
     description: String,
     hours: Number,
     taskState: String,
     id: Number,
     createTime: Date,
+    // _creator: {type: Schema.Types.ObjectId, ref: 'UserModel'}
 });
 
-// routes ========================
+let TaskModel = mongoose.model('TaskModel', TaskSchema);
 
+let UserSchema = new Schema({
+    username: {
+        type: String,
+        required: true,
+        index: {unique: true}
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    // tasks: [{type: Schema.Types.ObjectId, ref: 'TaskModel'}]
+    tasks: [TaskSchema]
+});
+
+UserSchema.pre('save', function (next) {
+
+    // only hash the password if it has been modified (or is new)
+    if (!this.isModified('password')) return next();
+
+    // generate a salt
+    bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
+        if (err) return next(err);
+
+        // hash the password along with our new salt
+        bcrypt.hash(this.password, salt, (err, hash) => {
+            if (err) return next(err);
+
+            // override the cleartext password with the hashed one
+            this.password = hash;
+            next();
+        });
+    });
+});
+
+UserSchema.methods.comparePassword = function (candidatePassword, cb) {
+    bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
+        if (err) return cb(err);
+        cb(null, isMatch);
+    });
+};
+
+let UserModel = mongoose.model('UserModel', UserSchema);
+
+// routes ========================
 app.post('/api/log-in', function (req, res) {
-    let data = req.body;
-    let newTask = new TaskModel(data);
-    newTask.save(function (err) {
-        if (err) return handleError(err);
+    let username = req.body.username;
+    let password = req.body.password;
+
+    UserModel.findOne({username}, function (err, user) {
+        if (err) throw err;
+
+        user.comparePassword(password, function (err, isMatch) {
+            if (err) throw err;
+            if (isMatch) {
+                res.send(user._id);
+                app.currentUser = user._id;
+            }
+        });
     });
 });
 
 app.post('/api/register', function (req, res) {
     let username = req.body.username;
     let password = req.body.password;
-    newTask.save(function (err) {
-        if (err) return handleError(err);
+
+    let newUser = new UserModel({username, password});
+
+    newUser.save(function (err) {
+        if (err) throw err;
+        res.sendStatus(200);
     });
 });
 
 app.get('/api/all-tasks', function (req, res) {
-    TaskModel.find(function (err, tasks) {
+    UserModel.findOne({_id: app.currentUser}, function (err, user) {
         if (err) return handleError(err);
-        res.json(tasks);
+        res.json(user.tasks);
     });
 });
 
 app.post('/api/create-task', function (req, res) {
     let data = req.body;
     let newTask = new TaskModel(data);
+    UserModel
+        .findOne({_id: app.currentUser})
+        .tasks.push(data);
     newTask.save(function (err) {
         if (err) return handleError(err);
     });

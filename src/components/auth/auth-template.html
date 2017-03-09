@@ -1,14 +1,18 @@
-<div class="form-control">
+<div>
+    <h2>{{showLogIn ? 'Log In': 'Register'}}</h2>
     <form>
         <input type="text"
                placeholder="username"
                ng-model="username">
+
         <input type="password"
                placeholder="password"
                ng-model="password">
+
         <button class="btn btn-primary"
-                ng-click="register()">
-            Register
+                ng-click="auth(username, password)">
+            {{showLogIn ? 'Log In': 'Register'}}
         </button>
     </form>
+    <a ng-click="showLogIn = !showLogIn" ng-hide="showLogIn">Already registered?</a>
 </div>
