@@ -3,7 +3,7 @@
  */
 
 angular.module('myApp')
-    .controller('ListController', ['sharedService', 'dataService', '$scope',
+    .controller('ListController', ['sharedService', 'dataService', '$scope', '$http',
         function (sharedService, dataService, $scope) {
             let showTasksByState = sharedService.showTasksByState;
             $scope.showTasksByState = sharedService.showTasksByState;
