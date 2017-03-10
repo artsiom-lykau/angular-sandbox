@@ -45,7 +45,6 @@ let TaskSchema = new Schema({
     taskState: String,
     id: Number,
     createTime: Date,
-    // _creator: {type: Schema.Types.ObjectId, ref: 'UserModel'}
 });
 
 let TaskModel = mongoose.model('TaskModel', TaskSchema);
@@ -60,7 +59,6 @@ let UserSchema = new Schema({
         type: String,
         required: true
     },
-    // tasks: [{type: Schema.Types.ObjectId, ref: 'TaskModel'}]
     tasks: [TaskSchema]
 });
 
@@ -143,24 +141,6 @@ app.post('/api/create-task', function (req, res) {
 app.put('/api/update-task/:_id', function (req, res) {
     let data = req.body;
     let _id = req.params._id;
-    console.log(data);
-    /*    TaskModel.update({_id: req.params._id}, {
-     name: data.name,
-     description: data.description,
-     hours: data.hours,
-     taskState: data.taskState
-     }, function (err) {
-     if (err) return handleError(err);
-     })*/
-
-    /*    UserModel.findOne({_id: req.session.currentUser},
-     function (err, user) {
-     if (err) return handleError(err);
-     let task = user.tasks.find((it, i, arr) => {
-     return it._id == _id
-     });
-     task = data;
-     });*/
     UserModel.update({_id: req.session.currentUser, 'tasks._id': _id}, {
         $set: {
             'tasks.$.name': data.name,
@@ -171,14 +151,19 @@ app.put('/api/update-task/:_id', function (req, res) {
     }, function (err) {
         if (err) return handleError(err);
     })
-
 });
 
 app.delete('/api/delete-task/:_id', function (req, res) {
-    TaskModel.remove({_id: req.params._id},
-        function (err) {
-            if (err) return handleError(err);
-        });
+    let _id = req.params._id;
+    /*    TaskModel.remove({_id: req.params._id},
+     function (err) {
+     if (err) return handleError(err);
+     });*/
+    UserModel.update({_id: req.session.currentUser}, {
+        $pull: {'tasks': {_id}},
+    }, function (err) {
+        if (err) throw err;
+    })
 });
 
 app.listen(PORT);
