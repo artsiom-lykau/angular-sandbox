@@ -5,7 +5,6 @@
 // set up ========================
 let express = require('express');
 let session = require('express-session');
-let Session = session.Session;
 let cookieParser = require('cookie-parser');
 let app = express();
 let mongoose = require('mongoose');
@@ -29,9 +28,12 @@ app.use(morgan('dev'));                                         // log every req
 app.use(cookieParser());
 app.use(session({
     secret: 'keyboard cat',
-    // key: 'keyboard cat',
-    store: new MongoStore({mongooseConnection: mongoose.connection})
+    store: new MongoStore({mongooseConnection: mongoose.connection}),
+    cookie: {
+        httpOnly: false
+    }
 }));
+
 app.use(bodyParser.urlencoded({'extended': 'true'}));           // parse application/x-www-form-urlencoded
 app.use(bodyParser.json());                                     // parse application/json
 app.use(methodOverride());
@@ -95,36 +97,67 @@ let UserModel = mongoose.model('UserModel', UserSchema);
 app.post('/api/log-in', function (req, res, next) {
     let username = req.body.username;
     let password = req.body.password;
+    let cookie = req.cookies;
 
     UserModel.findOne({username}, function (err, user) {
         if (err) throw err;
-        user.comparePassword(password, function (err, isMatch) {
-            if (err) throw err;
-            if (isMatch) {
-                req.session.number = req.session.number + 1 || 1;
-                req.session.currentUser = user._id;
-                res.send(req.session);
-            }
-        });
+        if (user) {
+            user.comparePassword(password, function (err, isMatch) {
+                if (err) throw err;
+                if (isMatch) {
+                    req.session.currentUser = user._id;
+                    console.log(req.session.cookie);
+                    if (!res.cookie['logintoken']) {
+                        res.cookie('logintoken', user._id, {maxAge: 900000, httpOnly: false});
+                    }
+                    else {
+                        console.log(res.cookie['logintoken']);
+                    }
+                    res.send(user.username);
+                }
+                else res.sendStatus(404);
+            })
+        }
+        else res.sendStatus(404);
     });
+});
+
+app.get('/api/log-out', function (req, res) {
+    req.session.destroy(function (err) {
+        if (err) throw err;
+    });
+    res.end();
 });
 
 app.post('/api/register', function (req, res) {
     let username = req.body.username;
     let password = req.body.password;
+    let newUser;
 
-    let newUser = new UserModel({username, password});
+    if (username && password) {
+        UserModel.findOne({username: username}, function (err, user) {
+            if (err) throw err;
+            if (user) {
+                res.sendStatus(409);
+            }
+            else {
+                newUser = new UserModel({username, password});
+                newUser.save(function (err) {
+                    if (err) throw err;
+                    res.sendStatus(200);
+                });
+            }
+        });
+    }
+    else res.sendStatus(404);
 
-    newUser.save(function (err) {
-        if (err) throw err;
-        res.sendStatus(200);
-    });
+
 });
 
 app.get('/api/all-tasks', function (req, res) {
     console.log(req.session.currentUser);
     UserModel.findOne({_id: req.session.currentUser}, function (err, user) {
-        if (err) return handleError(err);
+        if (err) throw err;
         res.json(user.tasks);
     });
 });
@@ -134,7 +167,7 @@ app.post('/api/create-task', function (req, res) {
     UserModel.update({_id: req.session.currentUser}, {
         $push: {'tasks': data}
     }, function (err) {
-        if (err) return handleError(err);
+        if (err) throw err;
     })
 });
 
@@ -149,7 +182,7 @@ app.put('/api/update-task/:_id', function (req, res) {
             'tasks.$.taskState': data.taskState,
         },
     }, function (err) {
-        if (err) return handleError(err);
+        if (err) throw err;
     })
 });
 
@@ -157,7 +190,7 @@ app.delete('/api/delete-task/:_id', function (req, res) {
     let _id = req.params._id;
     /*    TaskModel.remove({_id: req.params._id},
      function (err) {
-     if (err) return handleError(err);
+     if (err) throw err;
      });*/
     UserModel.update({_id: req.session.currentUser}, {
         $pull: {'tasks': {_id}},

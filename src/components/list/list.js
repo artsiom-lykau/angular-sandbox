@@ -3,10 +3,15 @@
  */
 
 angular.module('myApp')
-    .controller('ListController', ['sharedService', 'dataService', '$scope',
-        function (sharedService, dataService, $scope) {
+    .controller('ListController', ['sharedService', 'dataService', '$scope', 'authenticationService', '$state',
+        function (sharedService, dataService, $scope, authenticationService, $state) {
             let showTasksByState = sharedService.showTasksByState;
             $scope.showTasksByState = sharedService.showTasksByState;
+            $scope.currentUser = sharedService.currentUser;
+            $scope.logOut = authenticationService.logOut.bind(null,
+                function (res) {
+                    $state.go('auth')
+                });
 
             $scope.$watch(() => sharedService.tasksToShow,
                 function () {

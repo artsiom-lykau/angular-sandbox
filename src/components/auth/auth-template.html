@@ -1,22 +1,41 @@
-<div>
-    <h2>{{showLogIn ? 'Log In': 'Register'}}</h2>
-    <form>
-        <input type="text"
-               placeholder="username"
-               ng-model="username">
+<div class="col-sm-4 col-sm-offset-4 auth__container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="auth__header">{{showLogIn ? 'Log In': 'Sign Up'}}</h2>
+        </div>
+        <form class="auth">
+            <input type="text"
+                   class="form-control auth__username"
+                   placeholder="username"
+                   ng-model="username">
 
-        <input type="password"
-               placeholder="password"
-               ng-model="password">
+            <input type="password"
+                   class="form-control auth__password"
+                   placeholder="password"
+                   ng-model="password">
 
-        <button class="btn btn-primary"
-                ng-click="auth(username, password)">
-            {{showLogIn ? 'Log In': 'Register'}}
-        </button>
-    </form>
-    <button ng-click="showLogIn = !showLogIn"
-            ng-hide="showLogIn"
-            class="btn btn-info">
-        Already registered?
-    </button>
+            <button class="btn btn-primary"
+                    ng-click="auth(username, password)">
+                {{showLogIn ? 'Log In': 'Sign Up'}}
+            </button>
+
+            <button ng-click="showLogIn = !showLogIn"
+                    class="btn btn-info pull-right">
+                {{showLogIn ? 'Register' : 'Already registered?'}}
+            </button>
+        </form>
+    </div>
+    <div uib-alert
+         class="alert-warning"
+         close="logInErr = !logInErr"
+         ng-show="logInErr">
+        Incorrect username or password!
+    </div>
+
+    <div uib-alert
+         class="alert-warning"
+         close="userExist = !userExist"
+         ng-show="userExist">
+        User already exist!
+    </div>
 </div>

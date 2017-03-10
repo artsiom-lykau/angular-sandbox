@@ -5,7 +5,8 @@
 angular.module('myApp', [
     'ui.router',
     'ngAnimate',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ngCookies'
 ])
     .factory('sharedService', ['$filter',
         function ($filter) {
@@ -53,25 +54,36 @@ angular.module('myApp', [
             }
         }])
     /*
-    * {
+     * {
      task,
      user: sharedService.currentUser
      }
-    * */
+     * */
 
     .factory('authenticationService', ['$http',
         function ($http) {
             return {
-                logIn: function (username, password, callback) {
+                logIn: function (username, password, cb, errCb) {
                     $http.post('/api/log-in', {username, password})
                         .then(res => {
-                            if (callback) {
-                                callback(res)
-                            }
+                            if (cb) cb(res)
+
+                        })
+                        .catch(res => {
+                            if (errCb) errCb(res)
                         })
                 },
-                register: function (username, password, callback) {
+                register: function (username, password, cb, errCb) {
                     $http.post('/api/register', {username, password})
+                        .then(res => {
+                            if (cb) cb(res)
+                        })
+                        .catch(res => {
+                            if (errCb) errCb(res)
+                        })
+                },
+                logOut: function (callback) {
+                    $http.get('/api/log-out')
                         .then(res => {
                             if (callback) callback(res)
                         })

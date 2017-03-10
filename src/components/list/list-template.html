@@ -1,8 +1,17 @@
 <div uib-accordion
      class="app-container">
-    <div class="header panel panel-default">
+    <div class="well clearfix">
+        <h1 class="pull-left">
+            Hello, {{currentUser}}!
+        </h1>
+        <button class="pull-right btn btn-danger"
+                ng-click="logOut()">
+            Logout
+        </button>
+    </div>
+    <div class="header panel panel-info">
         <div class="panel-heading">
-            <h1>{{tasksToShow.header}}</h1>
+            <h2>{{tasksToShow.header}}</h2>
         </div>
         <div class="panel-body">
             <filter-template></filter-template>
