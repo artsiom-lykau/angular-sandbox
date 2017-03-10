@@ -14,5 +14,9 @@
             {{showLogIn ? 'Log In': 'Register'}}
         </button>
     </form>
-    <a ng-click="showLogIn = !showLogIn" ng-hide="showLogIn">Already registered?</a>
+    <button ng-click="showLogIn = !showLogIn"
+            ng-hide="showLogIn"
+            class="btn btn-info">
+        Already registered?
+    </button>
 </div>
