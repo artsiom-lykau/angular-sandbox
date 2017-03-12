@@ -135,7 +135,7 @@ app.post('/api/register', function (req, res) {
     let newUser;
 
     if (username && password) {
-        UserModel.findOne({username: username}, function (err, user) {
+        UserModel.findOne({username}, function (err, user) {
             if (err) throw err;
             if (user) {
                 res.sendStatus(409);

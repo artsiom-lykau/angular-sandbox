@@ -6,7 +6,8 @@ angular.module('myApp', [
     'ui.router',
     'ngAnimate',
     'ui.bootstrap',
-    'ngCookies'
+    'ngCookies',
+    'angular-md5'
 ])
     .factory('sharedService', ['$filter',
         function ($filter) {
@@ -33,8 +34,8 @@ angular.module('myApp', [
             };
             return sharedService;
         }])
-    .factory('dataService', ['$http', '$q', 'sharedService',
-        function ($http, $q, sharedService) {
+    .factory('dataService', ['$http', '$q',
+        function ($http, $q) {
             return {
                 getTasksAndStates: function () {
                     return $q.all([
@@ -53,18 +54,11 @@ angular.module('myApp', [
                 }
             }
         }])
-    /*
-     * {
-     task,
-     user: sharedService.currentUser
-     }
-     * */
-
-    .factory('authenticationService', ['$http',
-        function ($http) {
+    .factory('authenticationService', ['$http', 'md5',
+        function ($http, md5) {
             return {
                 logIn: function (username, password, cb, errCb) {
-                    $http.post('/api/log-in', {username, password})
+                    $http.post('/api/log-in', {username, password: md5.createHash(password)})
                         .then(res => {
                             if (cb) cb(res)
 
@@ -74,7 +68,7 @@ angular.module('myApp', [
                         })
                 },
                 register: function (username, password, cb, errCb) {
-                    $http.post('/api/register', {username, password})
+                    $http.post('/api/register', {username, password: md5.createHash(password)})
                         .then(res => {
                             if (cb) cb(res)
                         })
