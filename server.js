@@ -97,7 +97,6 @@ let UserModel = mongoose.model('UserModel', UserSchema);
 app.post('/api/log-in', function (req, res, next) {
     let username = req.body.username;
     let password = req.body.password;
-    let cookie = req.cookies;
 
     UserModel.findOne({username}, function (err, user) {
         if (err) throw err;
@@ -106,13 +105,6 @@ app.post('/api/log-in', function (req, res, next) {
                 if (err) throw err;
                 if (isMatch) {
                     req.session.currentUser = user._id;
-                    console.log(req.session.cookie);
-                    if (!res.cookie['logintoken']) {
-                        res.cookie('logintoken', user._id, {maxAge: 900000, httpOnly: false});
-                    }
-                    else {
-                        console.log(res.cookie['logintoken']);
-                    }
                     res.send(user.username);
                 }
                 else res.sendStatus(404);
@@ -150,8 +142,6 @@ app.post('/api/register', function (req, res) {
         });
     }
     else res.sendStatus(404);
-
-
 });
 
 app.get('/api/all-tasks', function (req, res) {

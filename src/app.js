@@ -57,8 +57,12 @@ angular.module('myApp', [
     .factory('authenticationService', ['$http', 'md5',
         function ($http, md5) {
             return {
-                logIn: function (username, password, cb, errCb) {
-                    $http.post('/api/log-in', {username, password: md5.createHash(password)})
+                logIn: function (username, password, rememberMe, cb, errCb) {
+                    $http.post('/api/log-in', {
+                        username,
+                        password: md5.createHash(password),
+                        rememberMe
+                    })
                         .then(res => {
                             if (cb) cb(res)
 
@@ -68,7 +72,10 @@ angular.module('myApp', [
                         })
                 },
                 register: function (username, password, cb, errCb) {
-                    $http.post('/api/register', {username, password: md5.createHash(password)})
+                    $http.post('/api/register', {
+                        username,
+                        password: md5.createHash(password)
+                    })
                         .then(res => {
                             if (cb) cb(res)
                         })
@@ -76,10 +83,10 @@ angular.module('myApp', [
                             if (errCb) errCb(res)
                         })
                 },
-                logOut: function (callback) {
+                logOut: function (cb) {
                     $http.get('/api/log-out')
                         .then(res => {
-                            if (callback) callback(res)
+                            if (cb) cb(res)
                         })
                 }
             }
