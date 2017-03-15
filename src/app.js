@@ -57,11 +57,10 @@ angular.module('myApp', [
     .factory('authenticationService', ['$http', 'md5',
         function ($http, md5) {
             return {
-                logIn: function (username, password, rememberMe, cb, errCb) {
+                logIn: function (username, password, cb, errCb) {
                     $http.post('/api/log-in', {
                         username,
-                        password: md5.createHash(password),
-                        rememberMe
+                        password: md5.createHash(password)
                     })
                         .then(res => {
                             if (cb) cb(res)

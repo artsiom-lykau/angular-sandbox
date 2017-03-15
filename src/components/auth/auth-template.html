@@ -15,8 +15,8 @@
                    ng-model="password">
 
             <button class="btn btn-primary"
-                    ng-click="auth(username, password, rememberMe)">
-                {{showLogIn ? 'Log In': 'Sign Up'}}
+                    ng-click="showLogIn ? logIn(username, password) : register(username, password)">
+                {{showLogIn ? 'Log In' : 'Sign Up'}}
             </button>
 
             <button ng-click="showLogIn = !showLogIn"
@@ -25,17 +25,19 @@
             </button>
         </form>
     </div>
-    <div uib-alert
-         class="alert-warning"
-         close="logInErr = !logInErr"
-         ng-show="logInErr">
-        Incorrect username or password!
-    </div>
 
     <div uib-alert
          class="alert-warning"
-         close="userExist = !userExist"
-         ng-show="userExist">
-        User already exist!
+         close="showErrMsg = !showErrMsg"
+         ng-show="showErrMsg">
+        {{errMsg}}
     </div>
+
+    <div uib-alert
+         class="alert-success"
+         close="registerSuccess = !registerSuccess"
+         ng-show="registerSuccess">
+        User successfully created!
+    </div>
+
 </div>
