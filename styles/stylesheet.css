@@ -185,3 +185,20 @@ textarea {
 [ui-view="addNew"].ng-leave-active {
     opacity: 0;
 }
+
+.auth {
+    padding: 20px;
+}
+
+.auth__header {
+    /*margin-bottom: 10px;*/
+}
+
+.auth__username,
+.auth__password {
+    margin-bottom: 10px;
+}
+
+.auth__container {
+    margin-top: 40px;
+}

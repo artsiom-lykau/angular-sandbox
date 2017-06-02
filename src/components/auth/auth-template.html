@@ -1,14 +1,43 @@
-<div class="form-control">
-    <form>
-        <input type="text"
-               placeholder="username"
-               ng-model="username">
-        <input type="password"
-               placeholder="password"
-               ng-model="password">
-        <button class="btn btn-primary"
-                ng-click="register()">
-            Register
-        </button>
-    </form>
+<div class="col-sm-4 col-sm-offset-4 auth__container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="auth__header">{{showLogIn ? 'Log In': 'Sign Up'}}</h2>
+        </div>
+        <form class="auth">
+            <input type="text"
+                   class="form-control auth__username"
+                   placeholder="username"
+                   ng-model="username">
+
+            <input type="password"
+                   class="form-control auth__password"
+                   placeholder="password"
+                   ng-model="password">
+
+            <button class="btn btn-primary"
+                    ng-click="showLogIn ? logIn(username, password) : register(username, password)">
+                {{showLogIn ? 'Log In' : 'Sign Up'}}
+            </button>
+
+            <button ng-click="showLogIn = !showLogIn"
+                    class="btn btn-info pull-right">
+                {{showLogIn ? 'Register' : 'Already registered?'}}
+            </button>
+        </form>
+    </div>
+
+    <div uib-alert
+         class="alert-warning"
+         close="showErrMsg = !showErrMsg"
+         ng-show="showErrMsg">
+        {{errMsg}}
+    </div>
+
+    <div uib-alert
+         class="alert-success"
+         close="registerSuccess = !registerSuccess"
+         ng-show="registerSuccess">
+        User successfully created!
+    </div>
+
 </div>

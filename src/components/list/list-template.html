@@ -1,8 +1,17 @@
 <div uib-accordion
      class="app-container">
-    <div class="header panel panel-default">
+    <div class="well clearfix">
+        <h1 class="pull-left">
+            Hello, {{currentUser}}!
+        </h1>
+        <button class="pull-right btn btn-danger"
+                ng-click="logOut()">
+            Logout
+        </button>
+    </div>
+    <div class="header panel panel-info">
         <div class="panel-heading">
-            <h1>{{tasksToShow.header}}</h1>
+            <h2>{{tasksToShow.header}}</h2>
         </div>
         <div class="panel-body">
             <filter-template></filter-template>
@@ -24,7 +33,9 @@
                 <uib-accordion-heading>
                     <h3 class="task__name">
                         {{task.name}}
-                        <small class="task__order-prop">{{showOrderProp(task)}}</small>
+                        <small class="task__order-prop">
+                            {{showOrderProp(task)}}
+                        </small>
                     </h3>
                     <i class="glyphicon glyphicon-remove task__delete-btn"
                        ng-click="deleteTask(task, $event)">
@@ -36,7 +47,8 @@
                           cols="30"
                           rows="7"
                           ng-model="task.description"
-                          ng-show="task.showEditMenu"></textarea>
+                          ng-show="task.showEditMenu">
+                </textarea>
 
                 <input type="text"
                        class="task__name-editor form-control"
@@ -56,7 +68,9 @@
                         ng-show="task.showEditMenu">
                 </select>
 
-                <p ng-hide="task.showEditMenu">Hours: {{task.hours}}</p>
+                <p ng-hide="task.showEditMenu">
+                    Hours: {{task.hours}}
+                </p>
                 <input placeholder="Hours"
                        class="form-control"
                        type="number"
@@ -81,44 +95,3 @@
 <div class="ui-view-container">
     <div ui-view="addNew"></div>
 </div>
-
-<!--
-<filter-template></filter-template>
-<div ui-view="addNew"></div>
-
-<div class="list-container">
-    <h1 class="state-heading">{{tasksToShow.header}}</h1>
-    <ul ng-repeat="task in tasksToShow.data | orderBy: getOrderProp() : descOrder track by $index"
-        ng-init="task.showEditMenu = false">
-        <li class="task"
-            ng-class="{'todo-clr': task.taskState == 'todo',
-                       'in-progress-clr': task.taskState == 'inProgress',
-                       'testing-clr': task.taskState == 'testing',
-                       'done-clr': task.taskState == 'done'}">
-
-            <h3 ng-hide="task.showEditMenu">{{task.name}}</h3>
-            <input type="text" ng-model="task.name" ng-show="task.showEditMenu">
-
-            <h4 ng-hide="task.showEditMenu">{{getStateName(task)}}</h4>
-            <label for="moveTo" ng-show="task.showEditMenu">Move to state:</label>
-            <select id="moveTo"
-                    ng-model="task.taskState"
-                    ng-options="state.state as state.title for state in states"
-                    ng-show="task.showEditMenu">
-            </select>
-
-            <div ng-hide="task.showEditMenu" class="task__description">Description: {{task.description}}</div>
-            <textarea id="" cols="21" rows="5" ng-model="task.description" ng-show="task.showEditMenu"></textarea>
-
-            <p ng-hide="task.showEditMenu">Hours: {{task.hours}}</p>
-            <input type="number" ng-model="task.hours" ng-show="task.showEditMenu">
-
-            <button class="edit-btn" ng-click="editTask(task)">
-                {{task.showEditMenu ? 'Submit' : 'Edit'}}
-            </button>
-
-            <button class="delete-btn" ng-click="deleteTask(task)">X</button>
-        </li>
-    </ul>
-</div>
--->

@@ -5,68 +5,87 @@
 angular.module('myApp', [
     'ui.router',
     'ngAnimate',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ngCookies',
+    'angular-md5'
 ])
-    .factory('sharedService', ['$filter', function ($filter) {
-        let sharedService = {
-            showTasksByState: function (selectedState = 'all') {
+    .factory('sharedService', ['$filter',
+        function ($filter) {
+            let sharedService = {
+                showTasksByState: function (selectedState = 'all') {
 
-                let tasksByState = $filter('filter')(sharedService.todos,
-                    item => {
-                        return selectedState == 'all' ? item : item.taskState == selectedState
+                    let tasksByState = $filter('filter')(sharedService.todos,
+                        item => {
+                            return selectedState == 'all' ? item : item.taskState == selectedState
+                        });
+
+                    let selectedTitle = sharedService.states.find(item => {
+                        return item.state == selectedState
                     });
 
-                let selectedTitle = sharedService.states.find(item => {
-                    return item.state == selectedState
-                });
+                    sharedService.tasksToShow = {
+                        header: selectedTitle ? selectedTitle.title : "All",
+                        data: tasksByState
+                    };
 
-                sharedService.tasksToShow = {
-                    header: selectedTitle ? selectedTitle.title : "All",
-                    data: tasksByState
-                };
-
-                sharedService.selectedState = selectedState;
-            },
-            isLoggedIn: false
-        };
-        return sharedService;
-    }])
-    .factory('dataService', ['$http', '$q', function ($http, $q) {
-        return {
-            getTasksAndStates: function () {
-                return $q.all([
-                    $http.get('./api/all-tasks'),
-                    $http.get('./data/states.json')
-                ]);
-            },
-            addNewTask: function (task) {
-                return $http.post('/api/create-task', task);
-            },
-            editTask: function (task) {
-                return $http.put(`/api/update-task/${task._id}`, task);
-            },
-            deleteTask: function (task) {
-                return $http.delete(`/api/delete-task/${task._id}`, task);
-            }
-        }
-    }])
-    .factory('AuthenticationService', ['$http',
-        function ($http) {
+                    sharedService.selectedState = selectedState;
+                },
+                isLoggedIn: false
+            };
+            return sharedService;
+        }])
+    .factory('dataService', ['$http', '$q',
+        function ($http, $q) {
             return {
-                login: function (username, password, callback) {
-                    $http.post('/api/log-in', {username, password})
+                getTasksAndStates: function () {
+                    return $q.all([
+                        $http.get(`./api/all-tasks`),
+                        $http.get('./data/states.json')
+                    ]);
+                },
+                addNewTask: function (task) {
+                    return $http.post('/api/create-task', task);
+                },
+                editTask: function (task) {
+                    return $http.put(`/api/update-task/${task._id}`, task);
+                },
+                deleteTask: function (task) {
+                    return $http.delete(`/api/delete-task/${task._id}`, task);
+                }
+            }
+        }])
+    .factory('authenticationService', ['$http', 'md5',
+        function ($http, md5) {
+            return {
+                logIn: function (username, password, cb, errCb) {
+                    $http.post('/api/log-in', {
+                        username,
+                        password: md5.createHash(password)
+                    })
                         .then(res => {
-                            if (callback) {
-                                callback(res)
-                            }
+                            if (cb) cb(res)
+
+                        })
+                        .catch(res => {
+                            if (errCb) errCb(res)
                         })
                 },
-                register: function (username, password, callback) {
-                    $http.post('/api/register', {username, password})
+                register: function (username, password, cb, errCb) {
+                    $http.post('/api/register', {
+                        username,
+                        password: md5.createHash(password)
+                    })
                         .then(res => {
-                            if (callback) {
-                                callback(res)
-                            }
+                            if (cb) cb(res)
+                        })
+                        .catch(res => {
+                            if (errCb) errCb(res)
+                        })
+                },
+                logOut: function (cb) {
+                    $http.get('/api/log-out')
+                        .then(res => {
+                            if (cb) cb(res)
                         })
                 }
             }
