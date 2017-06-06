@@ -45,8 +45,7 @@ let TaskSchema = new Schema({
     description: String,
     hours: Number,
     taskState: String,
-    id: Number,
-    createTime: Date,
+    createTime: Date
 });
 
 let TaskModel = mongoose.model('TaskModel', TaskSchema);
@@ -165,10 +164,10 @@ app.post('/api/create-task', function (req, res) {
     })
 });
 
-app.put('/api/update-task/:_id', function (req, res) {
+app.put('/api/update-task/:createTime', function (req, res) {
     let data = req.body;
-    let _id = req.params._id;
-    UserModel.update({_id: req.session.currentUser, 'tasks._id': _id}, {
+    let createTime = req.params.createTime;
+    UserModel.update({_id: req.session.currentUser, 'tasks.createTime': createTime}, {
         $set: {
             'tasks.$.name': data.name,
             'tasks.$.description': data.description,
@@ -180,14 +179,10 @@ app.put('/api/update-task/:_id', function (req, res) {
     })
 });
 
-app.delete('/api/delete-task/:_id', function (req, res) {
-    let _id = req.params._id;
-    /*    TaskModel.remove({_id: req.params._id},
-     function (err) {
-     if (err) throw err;
-     });*/
+app.delete('/api/delete-task/:createTime', function (req, res) {
+    let createTime = req.params.createTime;
     UserModel.update({_id: req.session.currentUser}, {
-        $pull: {'tasks': {_id}},
+        $pull: {'tasks': {createTime}},
     }, function (err) {
         if (err) throw err;
     })

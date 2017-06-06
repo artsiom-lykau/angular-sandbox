@@ -16,6 +16,7 @@ angular.module('myApp', [
 
                     let tasks = JSON.parse(localStorage.getItem('tasks'));
                     let states = JSON.parse(localStorage.getItem('states'));
+                    sharedService.states = states;
 
                     let tasksByState = $filter('filter')(tasks,
                         item => {
@@ -53,10 +54,10 @@ angular.module('myApp', [
                     return $http.post('/api/create-task', task);
                 },
                 editTask: function (task) {
-                    return $http.put(`/api/update-task/${task._id}`, task);
+                    return $http.put(`/api/update-task/${task.createTime}`, task);
                 },
                 deleteTask: function (task) {
-                    return $http.delete(`/api/delete-task/${task._id}`, task);
+                    return $http.delete(`/api/delete-task/${task.createTime}`, task);
                 }
             }
         }])

@@ -10,9 +10,8 @@ angular.module('myApp')
             $scope.addNewTask = function (newTask) {
                 newTask.createTime = Date.now();
                 if (newTask.name && newTask.taskState) {
-                    sharedService.todos.push(newTask);
-                    $scope.showTasksByState($scope.selectedState);
                     localStorageService.setNewItem(newTask, dataService.addNewTask);
+                    $scope.showTasksByState($scope.selectedState);
                     $scope.newTask = {};
                 }
             };
