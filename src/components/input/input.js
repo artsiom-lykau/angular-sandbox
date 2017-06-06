@@ -3,8 +3,8 @@
  */
 
 angular.module('myApp')
-    .controller('InputController', ['sharedService', '$scope', 'dataService',
-        function (sharedService, $scope, dataService) {
+    .controller('InputController', ['sharedService', '$scope', 'dataService', 'localStorageService',
+        function (sharedService, $scope, dataService, localStorageService) {
             $scope.showTasksByState = sharedService.showTasksByState;
 
             $scope.addNewTask = function (newTask) {
@@ -12,7 +12,7 @@ angular.module('myApp')
                 if (newTask.name && newTask.taskState) {
                     sharedService.todos.push(newTask);
                     $scope.showTasksByState($scope.selectedState);
-                    dataService.addNewTask(newTask);
+                    localStorageService.setNewItem(newTask, dataService.addNewTask);
                     $scope.newTask = {};
                 }
             };
@@ -20,7 +20,7 @@ angular.module('myApp')
             $scope.$watch(() => sharedService.states,
                 function () {
                     if (!sharedService.states) {
-                        dataService.getTasksAndStates()
+                        localStorageService.getLocalStorageItems(dataService.getUser, dataService.getTasksAndStates)
                             .then(res => {
                                 sharedService.states = res[1].data;
                             })

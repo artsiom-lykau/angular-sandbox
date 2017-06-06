@@ -152,6 +152,10 @@ app.get('/api/all-tasks', function (req, res) {
     });
 });
 
+app.get('/api/user-id', function (req, res) {
+    res.send(req.session.currentUser);
+});
+
 app.post('/api/create-task', function (req, res) {
     let data = req.body;
     UserModel.update({_id: req.session.currentUser}, {

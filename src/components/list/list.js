@@ -3,8 +3,8 @@
  */
 
 angular.module('myApp')
-    .controller('ListController', ['sharedService', 'dataService', '$scope', 'authenticationService', '$state',
-        function (sharedService, dataService, $scope, authenticationService, $state) {
+    .controller('ListController', ['sharedService', 'dataService', '$scope', 'authenticationService', '$state', 'localStorageService',
+        function (sharedService, dataService, $scope, authenticationService, $state, localStorageService) {
             let showTasksByState = sharedService.showTasksByState;
             $scope.showTasksByState = sharedService.showTasksByState;
             $scope.currentUser = sharedService.currentUser;
@@ -18,11 +18,9 @@ angular.module('myApp')
                     $scope.tasksToShow = sharedService.tasksToShow;
                 });
 
-            dataService.getTasksAndStates()
+            localStorageService.getLocalStorageItems(dataService.getUser, dataService.getTasksAndStates)
                 .then(results => {
-                    sharedService.todos = results[0].data;
-                    sharedService.states = results[1].data;
-                    $scope.states = results[1].data;
+                    $scope.states = results[1];
                     showTasksByState('all');
                 });
 
@@ -70,7 +68,7 @@ angular.module('myApp')
             $scope.editTask = function (task) {
                 task.showEditMenu = !task.showEditMenu;
                 if (!task.showEditMenu && task.name && task.taskState) {
-                    dataService.editTask(task);
+                    localStorageService.updateItem(task, dataService.editTask);
                     showTasksByState($scope.selectedState);
                 }
             };
@@ -80,9 +78,8 @@ angular.module('myApp')
                     e.preventDefault();
                     e.stopPropagation();
                 }
-                sharedService.todos.splice(sharedService.todos.indexOf(task), 1);
+                localStorageService.removeItem(task, dataService.deleteTask);
                 showTasksByState(sharedService.selectedState);
-                dataService.deleteTask(task);
             };
 
         }])

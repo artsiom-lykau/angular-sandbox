@@ -14,12 +14,15 @@ angular.module('myApp', [
             let sharedService = {
                 showTasksByState: function (selectedState = 'all') {
 
-                    let tasksByState = $filter('filter')(sharedService.todos,
+                    let tasks = JSON.parse(localStorage.getItem('tasks'));
+                    let states = JSON.parse(localStorage.getItem('states'));
+
+                    let tasksByState = $filter('filter')(tasks,
                         item => {
                             return selectedState == 'all' ? item : item.taskState == selectedState
                         });
 
-                    let selectedTitle = sharedService.states.find(item => {
+                    let selectedTitle = states.find(item => {
                         return item.state == selectedState
                     });
 
@@ -43,6 +46,9 @@ angular.module('myApp', [
                         $http.get('./data/states.json')
                     ]);
                 },
+                getUser: function () {
+                    return $http.get('./api/user-id')
+                },
                 addNewTask: function (task) {
                     return $http.post('/api/create-task', task);
                 },
@@ -54,6 +60,58 @@ angular.module('myApp', [
                 }
             }
         }])
+    .factory('localStorageService', [function () {
+        return {
+            getLocalStorageItems: function (getUser, getTasks) {
+                return getUser()
+                    .then(res => {
+                        let currentUser = res.data;
+                        if (currentUser != localStorage.getItem('user')) {
+                            return getTasks()
+                                .then(res => {
+                                    let tasks = res[0].data;
+                                    let states = res[1].data;
+                                    localStorage.setItem('tasks', JSON.stringify(tasks));
+                                    localStorage.setItem('states', JSON.stringify(states));
+                                    localStorage.setItem('user', currentUser);
+                                    return new Promise(function (resolve) {
+                                        resolve([
+                                            JSON.parse(localStorage.getItem('tasks')),
+                                            JSON.parse(localStorage.getItem('states')),
+                                        ])
+                                    });
+                                });
+                        }
+                        return new Promise(function (resolve) {
+                            resolve([
+                                JSON.parse(localStorage.getItem('tasks')),
+                                JSON.parse(localStorage.getItem('states')),
+                            ])
+                        })
+                    });
+            },
+            setNewItem: function (item, sendToBD) {
+                sendToBD(item);
+                let tasks = JSON.parse(localStorage.getItem('tasks'));
+                tasks.push(item);
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+            },
+            updateItem: function (item, sendToBD) {
+                sendToBD(item);
+                let tasks = JSON.parse(localStorage.getItem('tasks'));
+                let task = tasks.findIndex(it => it._id == item._id);
+                tasks[task] = item;
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+            },
+            removeItem: function (item, sendToBD) {
+                sendToBD(item);
+                let tasks = JSON.parse(localStorage.getItem('tasks'));
+                let task = tasks.findIndex(it => it._id == item._id);
+                tasks.splice(task, 1);
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+            }
+        }
+    }])
     .factory('authenticationService', ['$http', 'md5',
         function ($http, md5) {
             return {
