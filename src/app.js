@@ -2,12 +2,14 @@
  * Created by lykovartem on 2/16/2017.
  */
 
+const SHA1 = require("crypto-js/sha1");
+const ENCHEX = require("crypto-js/enc-hex");
+
 angular.module('myApp', [
     'ui.router',
     'ngAnimate',
     'ui.bootstrap',
-    'ngCookies',
-    'angular-md5'
+    'ngCookies'
 ])
     .factory('sharedService', ['$filter',
         function ($filter) {
@@ -113,13 +115,18 @@ angular.module('myApp', [
             }
         }
     }])
-    .factory('authenticationService', ['$http', 'md5',
-        function ($http, md5) {
+    .factory('authenticationService', ['$http',
+        function ($http) {
+
+            function createPasswordHash(password, encr = ENCHEX) {
+                return SHA1(password).toString(encr);
+            }
+
             return {
                 logIn: function (username, password, cb, errCb) {
                     $http.post('/api/log-in', {
                         username,
-                        password: md5.createHash(password)
+                        password: createPasswordHash(password)
                     })
                         .then(res => {
                             if (cb) cb(res)
@@ -132,7 +139,7 @@ angular.module('myApp', [
                 register: function (username, password, cb, errCb) {
                     $http.post('/api/register', {
                         username,
-                        password: md5.createHash(password)
+                        password: createPasswordHash(password)
                     })
                         .then(res => {
                             if (cb) cb(res)
